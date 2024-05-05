@@ -1,0 +1,6 @@
+movie data/
+key.py
+jsonResponse.json 
+poster.py
+__pycache__/
+flask_session/

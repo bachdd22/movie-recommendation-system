@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <br><br>
+    <div>
+        <form action="/find_movie" method="post">
+            <input autocomplete="off" autofocus name="movieName" placeholder="Name of your movie" type="text">
+            <button type="submit">Find your movie</button>
+        </form>
+        <br><br>
+        {% if results %}
+            {% for result in results %}
+            <figure>
+                <img src= {{ result.link }} alt="Description of the image" width="100px"><figcaption>{{ result.title }}</figcaption>
+            </figure>              
+            {% endfor %}
+        {% endif %}
+    </div>
+
+{% endblock %}

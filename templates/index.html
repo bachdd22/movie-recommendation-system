@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h1>Hi {{ username }}, </h1>
+    <br>
+    
+    <h2>Popular</h2>
+    <ul>
+        {% for movie in popular %}
+        <li>
+            <div>
+                <div>
+                    <figure>
+                        <img src= {{ movie.poster_path }} alt="popular movie" width="70" height="105"><figcaption>{{ movie.title }}</figcaption>
+                    </figure>   
+                </div>
+                <div>
+                    <h4>{{ movie.release_date[0:4] }}</h4>
+                    <h5>{{ movie.overview }}</h5>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
