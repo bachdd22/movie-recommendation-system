@@ -4,3 +4,5 @@ jsonResponse.json
 poster.py
 __pycache__/
 flask_session/
+find movie.ipynb
+schema.sql

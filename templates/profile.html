@@ -2,10 +2,10 @@
 
 {% block body %}
 
-    <h1>{{ user.username }}</h1>
-    <br>
-    <h3>{{ user.role }}</h3>
-    <br>
-    <h3>{{ user.registration_datetime[0:10] }}</h3>
+    <h1> Username: {{ user.username }}</h1>
+    <h3> User status: {{ user.role }}</h3>
+    <h3> Member since: {{ user.registration_datetime[0:10] }}</h3>
+    <br><br>
+    <a href="/change_password">Change your password</a>
 
 {% endblock %}

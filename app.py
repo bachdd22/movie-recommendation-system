@@ -6,6 +6,7 @@ from cs50 import SQL
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, login_required, cache
+from luhnchecker.luhn import Luhn
 import findMovies
 
 # Configure app
@@ -31,7 +32,7 @@ Session(app)
 @login_required
 def index():
     username = session.get("username")
-    popular = findMovies.findPopular()
+    popular = findMovies.findPopular(3)
     return render_template("index.html", username=username,popular=popular)
 
 
@@ -103,6 +104,41 @@ def register():
 
         return redirect("/")
 
+@app.route("/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    if request.method == "GET":
+        return render_template("change_password.html")
+    else:
+        user_id = session.get("user_id")
+
+        password = request.form.get("old_password")
+        new_password = request.form.get("new_password")
+        confirmation = request.form.get("confirmation")
+
+        if not password:
+            return apology("Please enter your current password")
+
+        if not new_password:
+            return apology("Please enter your new password")
+
+        if not confirmation:
+            return apology("Please confirm your password")
+
+        if new_password != confirmation:
+            return apology("Confirmation does not match password")
+        
+        rows = db.execute("SELECT * FROM users WHERE id = ?", user_id)
+        if len(rows) != 1 or not check_password_hash(rows[0]["password"], password):
+            return apology("Incorrect password", 403)
+
+        hash = generate_password_hash(new_password)
+        try:
+            db.execute("UPDATE users SET password = ? WHERE id = ?", hash, user_id)
+            return render_template("redirect_page.html", alert_message="Password changed. You will be redirected to home page.")
+        except Exception as e:
+            return apology(str(e))
+
 
 @app.route("/logout")
 def logout():
@@ -126,3 +162,27 @@ def profile():
     user_id = session.get("user_id")
     user = db.execute("SELECT * FROM users WHERE id = ?", user_id)[0]
     return render_template("profile.html", user=user)
+
+@app.route("/upgrade")
+@login_required
+def upgrade():
+    return render_template("upgrade.html")
+
+@app.route("/upgrade_portal", methods=["GET", "POST"])
+@login_required
+def upgrade_portal():
+    if request.method == "POST":
+        card_number = request.form.get("card-number-input")
+        if Luhn.check_luhn(card_number):
+            user_id = session.get("user_id")
+            db.execute("UPDATE users SET role = ? WHERE id = ?", "premium", user_id)
+            return render_template("redirect_page.html", alert_message="Your account is upgraded. You will be redirected to home page.")
+        else:
+            return render_template("redirect_page.html", alert_message="Invalid card. You will be redirected to home page.")
+    return render_template("credit.html")
+
+@app.route("/movie")
+@login_required
+def movie():
+    movie_id = request.args["movie_id"]
+    
