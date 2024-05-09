@@ -2,85 +2,47 @@
 
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="initial-scale=1, width=device-width">
-        <title>hello</title>
-        <style>
-            .heading-with-image {
-                display: flex; /* Use flexbox for horizontal alignment */
-                align-items: center; /* Center align items vertically */
-            }
-
-            .heading-with-image img {
-                width: 70px; /* Adjust image width as needed */
-                height: auto; /* Maintain aspect ratio */
-                margin-left: 10px; /* Add space between image and text */
-            }
-
-            .picture-row {
-            display: flex;
-            justify-content: space-around; /* Adjust as needed */
-            align-items: center;
-            margin: 20px 0; /* Adjust margin as needed */
-            }
-            .picture {
-                width: 200px; /* Adjust width as needed */
-                height: auto; /* Maintain aspect ratio */
-            }
-
-            .navbar {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background-color: #333;
-                /* Align the items horizontally */
-                display: flex;
-            }
-    
-            li {
-                /* Align the items horizontally */
-                float: left;
-            }
-    
-            li a {
-                display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-            }
-    
-            /* Change the link color to indicate active page */
-            li a.active {
-                background-color: #4CAF50;
-            }
-    
-            /* Change the color on hover */
-            li a:hover {
-                background-color: #555;
-            }
-        </style>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="static/css/style.css">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     </head>
     <body>
+
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="logo-container">
+                    <a href="/"><h1 class="logo">filmlist</h1></a>
+                </div>
+                <div class="menu-container">
+                    <ul class="menu-list">
+                        <li class="menu-list-item"><a class="navbar-item" href="/">Home</a></li>
+                        <li class="menu-list-item"><a class="navbar-item" href="/movie_list">Lists</a></li>
+                        <li class="menu-list-item"><a class="navbar-item" href="/find_movie">Search</a></li>
+                        <li class="menu-list-item"><a class="navbar-item" href="/profile">Profile</a></li>
+                        <li class="menu-list-item"><a class="navbar-item" href="/upgrade">Upgrade</a></li>
+                        <li class="menu-list-item"><a class="navbar-item" href="/logout">Log out</a></li>
+                    </ul>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-text-container">
+                        <span class="profile-text">{{ session['username'] }}</span>
+                    </div>
+                    <div class="toggle">
+                        <i class="fas fa-moon toggle-icon"></i>
+                        <i class="fas fa-sun toggle-icon"></i>
+                        <div class="toggle-ball"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <nav>
-            <ul class="navbar" style="line-height:80%">
-                <li>
-                    <a href="/">
-                        <div class="heading-with-image">
-                            <h1>Filmlist</h1>
-                            <img src="/static/filmlist logo 2.jpg" alt="Image" width="70" height="105">
-                        </div>
-                    </a>    
-                </li>
-                <li><a href="/">Home</a></li>
-                <li><a href="/movie_list">Lists</a></li>
-                <li><a href="/find_movie">Search</a></li>
-                <li><a href="/profile">Profile</a></li>               
-                <li><a href="/upgrade">Upgrade</a></li>
-                <li><a href="/logout">Log out</a></li>
-            </ul>
-        </nav>
         {% block body %}{% endblock %}
+        <script src="static/js/app.js"></script>
     </body>
 </html>

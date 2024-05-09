@@ -1,5 +1,6 @@
 import requests
 from helpers import cache
+import random
 from key import tmdb_api_key
 headers = {
     "accept": "application/json",
@@ -27,4 +28,57 @@ def findPopular(page=1):
     for movie in response:
         movie["backdrop_path"] = base_url + movie["backdrop_path"]
         movie["poster_path"] = base_url + movie["poster_path"]
+    random.shuffle(response)
     return response
+
+@cache.memoize(timeout=60)
+def findNowPlaying(page=1):
+    url = "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=" + str(page)
+    response = requests.get(url, headers=headers).json()["results"]
+    base_url = "https://image.tmdb.org/t/p/original"
+    for movie in response:
+        movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        movie["poster_path"] = base_url + movie["poster_path"]
+    random.shuffle(response)
+    return response
+
+@cache.memoize(timeout=60)
+def findTopRated(page=1):
+    url = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=" + str(page)
+    response = requests.get(url, headers=headers).json()["results"]
+    base_url = "https://image.tmdb.org/t/p/original"
+    for movie in response:
+        movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        movie["poster_path"] = base_url + movie["poster_path"]
+    random.shuffle(response)
+    for i in [1, 7]:
+        url = "https://api.themoviedb.org/3/movie/" + str(response[i]["id"]) +  "/images?language=en"
+        images = requests.get(url, headers=headers).json()
+        response[i]["logo_path"] = base_url + images["logos"][0]["file_path"] 
+    return response
+
+@cache.memoize(timeout=60)
+def findUpcoming(page=1):
+    url = "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=" + str(page)
+    response = requests.get(url, headers=headers).json()["results"]
+    base_url = "https://image.tmdb.org/t/p/original"
+    for movie in response:
+        movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        movie["poster_path"] = base_url + movie["poster_path"]
+    random.shuffle(response)
+    return response
+
+@cache.memoize(timeout=60)
+def getMovieDetails(movie_id):
+    url = "https://api.themoviedb.org/3/movie/" + movie_id + "?language=en-US"
+    base_url = "https://image.tmdb.org/t/p/original"
+    response = requests.get(url, headers=headers).json()
+    imdb_id = response_1["imdb_id"]
+    url = "https://api.themoviedb.org/3/find/"+ imdb_id +"?external_source=imdb_id"
+    response_1 = requests.get(url, headers=headers).json()
+    response["backdrop_path"] = base_url + response["backdrop_path"]
+    response["poster_path"] = base_url + response["poster_path"]
+    response["overview"] = response_1["movie_results"][0]["overview"]
+    response["release_date"] = response_1["movie_results"][0]["release_date"]
+    return response
+

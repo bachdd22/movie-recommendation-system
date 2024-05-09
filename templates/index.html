@@ -1,27 +1,98 @@
 {% extends "layout.html" %}
 
+{% block title %}Homepage{% endblock %}
+
 {% block body %}
 
-    <h1>Hi {{ username }}, </h1>
-    <br>
-    
-    <h2>Popular</h2>
-    <ul>
-        {% for movie in popular %}
-        <li>
-            <div>
-                <div>
-                    <figure>
-                        <img src= {{ movie.poster_path }} alt="popular movie" width="70" height="105"><figcaption>{{ movie.title }}</figcaption>
-                    </figure>   
-                </div>
-                <div>
-                    <h4>{{ movie.release_date[0:4] }}</h4>
-                    <h5>{{ movie.overview }}</h5>
-                </div>
+    <div class="container">
+        <div class="content-container">
+            <div class="featured-content"
+                style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url({{top[1].backdrop_path}});">
+                <img class="featured-title" src={{top[1].logo_path}} alt="">
+                <p class="featured-desc">{{top[1].title}}</p>
+                <p class="featured-desc">{{top[1].overview}}</p>
+                {% set movie_link = "/movie/?movie_id=" + top[1].id|string %}
+                <button class="featured-button"><a class="movie-page" href={{movie_link}}>View</a></button>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
 
+            <div class="movie-list-container">
+                <h1>Hi {{ session['username'] }}, </h1>
+                <br><br>
+
+                <h1 class="movie-list-title">Popular</h1>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        {% for movie in popular[2:] %}
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                            <span class="movie-list-item-title">{{ movie.title[:24] }}</span>
+                            <p class="movie-list-item-desc">{{ movie.overview[0:100] + "..." }}</p>
+                            {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                            <button class="movie-list-item-button"><a class="movie-page" href={{movie_link}}>View</a></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>           
+
+                <h1 class="movie-list-title">Now playing</h1>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        {% for movie in playing %}
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                            <span class="movie-list-item-title">{{ movie.title[:24] }}</span>
+                            <p class="movie-list-item-desc">{{ movie.overview[0:100] + "..." }}</p>
+                            {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                            <button class="movie-list-item-button"><a class="movie-page" href={{movie_link}}>View</a></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+
+                <div class="featured-content"
+                    style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url({{top[7].backdrop_path}});">
+                    <img class="featured-title" src={{top[7].logo_path}} alt="">
+                    <p class="featured-desc">{{top[7].title}}</p>
+                    <p class="featured-desc">{{top[7].overview}}</p>
+                    {% set movie_link = "/movie/?movie_id=" + top[7].id|string %}
+                    <button class="featured-button"><a class="movie-page" href={{movie_link}}>View</a></button>
+                </div>
+
+                <h1 class="movie-list-title">Top rated</h1>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        {% for movie in top %}
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                            <span class="movie-list-item-title">{{ movie.title[:24] }}</span>
+                            <p class="movie-list-item-desc">{{ movie.overview[0:100] + "..." }}</p>
+                            {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                            <button class="movie-list-item-button"><a class="movie-page" href={{movie_link}}>View</a></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+
+                <h1 class="movie-list-title">Upcoming</h1>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        {% for movie in upcoming %}
+                        <div class="movie-list-item">
+                            <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                            <span class="movie-list-item-title">{{ movie.title[:24] }}</span>
+                            <p class="movie-list-item-desc">{{ movie.overview[0:100] + "..." }}</p>
+                            {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                            <button class="movie-list-item-button"><a class="movie-page" href={{movie_link}}>View</a></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+
+        </div>
+    </div>
+    <br><br>
 {% endblock %}

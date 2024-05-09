@@ -32,8 +32,11 @@ Session(app)
 @login_required
 def index():
     username = session.get("username")
-    popular = findMovies.findPopular(3)
-    return render_template("index.html", username=username,popular=popular)
+    popular = findMovies.findPopular()
+    now_playing = findMovies.findNowPlaying()
+    top_rated = findMovies.findTopRated()
+    upcoming = findMovies.findUpcoming()
+    return render_template("index.html", username=username,popular=popular, playing=now_playing, top=top_rated, upcoming=upcoming)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -181,8 +184,13 @@ def upgrade_portal():
             return render_template("redirect_page.html", alert_message="Invalid card. You will be redirected to home page.")
     return render_template("credit.html")
 
-@app.route("/movie")
+@app.route("/movie_list")
+@login_required
+def movie_list():
+    return "yes"
+    
+@app.route("/movie/")
 @login_required
 def movie():
-    movie_id = request.args["movie_id"]
-    
+    movie_id = request.args.get("movie_id")
+    return str(movie_id)
