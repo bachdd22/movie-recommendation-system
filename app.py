@@ -1,12 +1,12 @@
-from flask import Flask, redirect, render_template, request, session
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, redirect, render_template, request, session, jsonify
+# from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_caching import Cache 
 from cs50 import SQL
-from tempfile import mkdtemp
+# from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-from helpers import apology, login_required, cache
 from luhnchecker.luhn import Luhn
+from helpers import apology, login_required, cache
 import findMovies
 
 # Configure app
@@ -153,10 +153,12 @@ def logout():
 def find_movie():
     if request.method == "POST":
         movie = request.form.get("movieName")
-        results = movie_db.execute("SELECT movies.id, title, year, rating, votes FROM movies LEFT JOIN ratings ON movies.id = ratings.movie_id WHERE title LIKE ? ORDER BY votes DESC LIMIT 8", "%" + movie + "%")
+        results = movie_db.execute("SELECT movies.id, title, year, rating, votes FROM movies LEFT JOIN ratings ON movies.id = ratings.movie_id WHERE title LIKE ? ORDER BY votes DESC LIMIT 10", "%" + movie + "%")
         for result in results:
-            result["link"] = findMovies.findPosters(str(result["id"]))
-        return render_template("find_movie.html", results=results)
+            movie_detail = findMovies.findPosters(str(result["id"]))
+            result["link"] = movie_detail[0]
+            result["id"] = movie_detail[1]
+        return render_template("find_movie.html", results=results, movie_name=movie)
     return render_template("find_movie.html")
 
 @app.route("/profile")
@@ -187,10 +189,26 @@ def upgrade_portal():
 @app.route("/movie_list")
 @login_required
 def movie_list():
-    return "yes"
+    return render_template("list.html")
     
 @app.route("/movie/")
 @login_required
 def movie():
-    movie_id = request.args.get("movie_id")
-    return str(movie_id)
+    movie_id = str(request.args.get("movie_id"))
+    movie_details = findMovies.getMovieDetails(movie_id)
+    return movie_details
+
+
+@app.route('/create_list', methods=['POST'])
+def create_list_route():
+    user_id = session.get("user_id")
+    data = request.json
+    list_name = data.get('name')
+    if not list_name:
+        return jsonify({'error': 'List name is required'}), 400
+    
+    try:
+        db.execute("INSERT INTO lists (user_id, list_title) VALUES (?, ?)", user_id, list_name)
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

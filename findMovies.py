@@ -16,8 +16,9 @@ def findPosters(movie_id):
     base_url = "https://image.tmdb.org/t/p/original"
     if len(response["movie_results"]) < 1:
         return None
-    link = base_url + response["movie_results"][0]["poster_path"]
-    return link
+    if response["movie_results"][0]["poster_path"]:
+        link = base_url + response["movie_results"][0]["poster_path"]
+    return link, str(response["movie_results"][0]["id"])
 
 
 @cache.memoize(timeout=60)
@@ -26,8 +27,10 @@ def findPopular(page=1):
     response = requests.get(url, headers=headers).json()["results"]
     base_url = "https://image.tmdb.org/t/p/original"
     for movie in response:
-        movie["backdrop_path"] = base_url + movie["backdrop_path"]
-        movie["poster_path"] = base_url + movie["poster_path"]
+        if movie["backdrop_path"]:
+            movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        if movie["poster_path"]:
+            movie["poster_path"] = base_url + movie["poster_path"]
     random.shuffle(response)
     return response
 
@@ -37,8 +40,10 @@ def findNowPlaying(page=1):
     response = requests.get(url, headers=headers).json()["results"]
     base_url = "https://image.tmdb.org/t/p/original"
     for movie in response:
-        movie["backdrop_path"] = base_url + movie["backdrop_path"]
-        movie["poster_path"] = base_url + movie["poster_path"]
+        if movie["backdrop_path"]:
+            movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        if movie["poster_path"]:
+            movie["poster_path"] = base_url + movie["poster_path"]
     random.shuffle(response)
     return response
 
@@ -48,8 +53,10 @@ def findTopRated(page=1):
     response = requests.get(url, headers=headers).json()["results"]
     base_url = "https://image.tmdb.org/t/p/original"
     for movie in response:
-        movie["backdrop_path"] = base_url + movie["backdrop_path"]
-        movie["poster_path"] = base_url + movie["poster_path"]
+        if movie["backdrop_path"]:
+            movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        if movie["poster_path"]:
+            movie["poster_path"] = base_url + movie["poster_path"]
     random.shuffle(response)
     for i in [1, 7]:
         url = "https://api.themoviedb.org/3/movie/" + str(response[i]["id"]) +  "/images?language=en"
@@ -63,8 +70,10 @@ def findUpcoming(page=1):
     response = requests.get(url, headers=headers).json()["results"]
     base_url = "https://image.tmdb.org/t/p/original"
     for movie in response:
-        movie["backdrop_path"] = base_url + movie["backdrop_path"]
-        movie["poster_path"] = base_url + movie["poster_path"]
+        if movie["backdrop_path"]:
+            movie["backdrop_path"] = base_url + movie["backdrop_path"]
+        if movie["poster_path"]:
+            movie["poster_path"] = base_url + movie["poster_path"]
     random.shuffle(response)
     return response
 
@@ -73,7 +82,7 @@ def getMovieDetails(movie_id):
     url = "https://api.themoviedb.org/3/movie/" + movie_id + "?language=en-US"
     base_url = "https://image.tmdb.org/t/p/original"
     response = requests.get(url, headers=headers).json()
-    imdb_id = response_1["imdb_id"]
+    imdb_id = response["imdb_id"]
     url = "https://api.themoviedb.org/3/find/"+ imdb_id +"?external_source=imdb_id"
     response_1 = requests.get(url, headers=headers).json()
     response["backdrop_path"] = base_url + response["backdrop_path"]

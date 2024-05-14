@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h1>Movie Lists</h1>
+    <button id="newListBtn">New List</button>
+    <div id="newListForm" style="display: none;">
+        <button id="closeBtn">X</button>
+        <form id="createForm">
+            <input type="text" id="listName" placeholder="Enter list name">
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    
+{% endblock %}

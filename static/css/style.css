@@ -11,6 +11,58 @@ a
     color: wheat;
 }
 
+.search-list-item {
+  margin-right: 30px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.search-list-item:hover .search-list-item-img {
+  border: 1px solid #00e054;
+  border-width: 5px;
+}
+
+.search-list-item:hover .popup-search-title {
+  visibility: visible;
+}
+
+.search-list-item-img {
+  transition: all 300ms ease-in-out;
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 20px;
+  position: relative;
+}
+
+.popup-search-title {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 103%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+ul {
+  list-style: none;
+}
+
+.poster-list {
+  position: relative;
+  left: 7%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   padding-top: 50px;
@@ -165,11 +217,16 @@ body {
   overflow: hidden;
 }
 
+.movie-page-view-link{
+  color: wheat;
+}
+
 .movie-list {
   display: flex;
   align-items: center;
   height: 300px;
   transform: translateX(0);
+  padding: 40px;
   transition: all 1s ease-in-out;
 }
 
@@ -182,6 +239,8 @@ body {
   transform: scale(1.2);
   margin: 0 30px;
   opacity: 0.5;
+  border: 1px solid #00e054;
+  border-width: 5px;
 }
 
 .movie-list-item:hover .movie-list-item-title,
@@ -202,14 +261,13 @@ body {
 .movie-list-item-title {
   background-color: #3330;
   padding: 0 10px;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
   position: absolute;
   top: 10%;
   left: 40px;
-  right: 40px;
+  width: 180px;
   opacity: 0;
-  white-space: nowrap;
   transition: 1s all ease-in-out;
 }
 
@@ -220,7 +278,7 @@ body {
   position: absolute;
   top: 30%;
   left: 50px;
-  width: 230px;
+  width: 160px;
   opacity: 0;
   transition: 1s all ease-in-out;
 }
@@ -250,12 +308,22 @@ body {
   cursor: pointer;
 }
 
+.left-arrow{
+  font-size: 120px;
+  position: absolute;
+  top: 90px;
+  left: 0;
+  color: lightgray;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
 .container.active {
   background-color: white;
 }
 
-.movie-list-title.active {
-  color: black;
+.movie-list-title {
+  padding-bottom: -20px;
 }
 
 .navbar-container.active {
