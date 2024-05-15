@@ -1,15 +1,3 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <title>Document</title>
-</head>
 <body>
     <div class="app">
         <div class="navbar">
@@ -60,9 +48,14 @@
                         </li>
     
                         <li class="movie-icon-show">
-                            <a href="" class="movie-icon-link">
-                                <i class="fa-solid fa-plus category-film-icon"></i>
-                            </a>
+                            <div class="dropdown">
+                                <button class="dropbtn"><i class="fa-solid fa-plus category-film-icon"></i></button>
+                                <div class="dropdown-content">
+                                  <a href="#" class="dropdown-content-link">Link 1</a>
+                                  <a href="#" class="dropdown-content-link">Link 2</a>
+                                  <a href="#" class="dropdown-content-link">Link 3</a>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                     <div class="watch-panel-container">
@@ -104,4 +97,3 @@
         </div>
     </div>
 </body>
-</html>
