@@ -8,10 +8,6 @@ a {
   color: #9ab;
 }
 
-html {
-  box-sizing: border-box;
-}
-
 .navbar-item {
   color: wheat;
 }
@@ -303,6 +299,7 @@ body {
   background-color: #151515;
   min-height: calc(100vh - 50px);
   color: white;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -443,6 +440,7 @@ body {
 .movie-desc {
   color: Black;
   padding-top: 30px;
+  padding-right: 40px;
   font-size: 25px;
   font-family: "Poetsen One", sans-serif;
   font-weight: 400;
@@ -459,7 +457,7 @@ body {
 }
 
 .person-profile-container {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), #151515), url('https://image.tmdb.org/t/p/original/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg');
+  background-color: #151515;
   min-height: calc(100vh - 50px);
   color: white;
   display: flex;
