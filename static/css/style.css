@@ -8,14 +8,14 @@ a {
   color: #9ab;
 }
 
+.navbar-item {
+  color: wheat;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   padding-top: 50px;
 
-}
-
-.navbar-item {
-  color: wheat;
 }
 
 .navbar {
@@ -305,7 +305,7 @@ body {
 
 .grid {
   width: 1200px;
-  min-width: 100%;
+  min-width: 80%;
   margin: 0 auto;
 }
 
@@ -429,7 +429,7 @@ body {
 }
 
 .movie-name {
-  color: black;
+  color: #FFF;
   font-size: 40px;
   padding-top: 20px;
   font-family: "Poetsen One", sans-serif;
@@ -438,20 +438,20 @@ body {
 }
 
 .movie-desc {
-  color: Black;
+  color: #9ab;
   padding-top: 30px;
   padding-right: 40px;
   font-size: 25px;
   font-family: "Poetsen One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  line-height: 1cm;
+  line-height: 1.5cm;
 }
 
 
 .category-film-icon {
   font-size: 30px;
-  color: black;
+  color: #9ab;
   margin-right: 40px;
   margin-left: 40px;
 }
@@ -562,4 +562,12 @@ body {
 .name-package {
   color: black;
   border-bottom: 2px solid black;
+}
+
+.movie-title{
+  font-size: 17px;
+}
+
+.desc{
+  line-height: 1.2cm;
 }
