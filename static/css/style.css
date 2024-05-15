@@ -8,14 +8,14 @@ a {
   color: #9ab;
 }
 
-.navbar-item {
-  color: wheat;
-}
-
 body {
   font-family: "Roboto", sans-serif;
   padding-top: 50px;
 
+}
+
+.navbar-item {
+  color: wheat;
 }
 
 .navbar {
