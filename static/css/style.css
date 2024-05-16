@@ -619,14 +619,25 @@ body {
   font-style: normal;
 }
 
+
+.search-box{
+  background-color: #151515;
+  min-height: calc(100vh - 50px);
+  color: white;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
 .search {
-  padding-top: 20px;
+  padding-top: 10px;
   display: inline-block;
   position: relative;
 }
 
 .search input[type="text"] {
-  width: 300px;
+  width: 400px;
   padding: 10px;
   
   margin-left: 20px;
@@ -638,9 +649,9 @@ body {
 .search button[type="submit"] {
   background-color: #4dbf00;
   border: none;
-  color: #fff;
+  color: black;
   cursor: pointer;
-  margin: 20px;
+  margin: 10px;
   margin-right: 0px;
   padding: 10px 20px;
   border-radius: 20px;
@@ -655,4 +666,26 @@ body {
   transform: scale(1.1);
   color: rgb(255, 255, 255);
   background-color: #347906;
+}
+
+.card-search{
+  background-color: #151515;
+  padding: 10px 40px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo-search{
+  color: #347906;
+  font-size: 60px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  display: inline;
+}
+
+.icon-search{
+  font-size: 60px;
+  padding-top: 5px;
+  color: white;
 }
