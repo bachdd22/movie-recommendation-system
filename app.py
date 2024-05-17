@@ -197,7 +197,7 @@ def movie():
     movie_id = str(request.args.get("movie_id"))
     movie_details = findMovies.getMovieDetails(movie_id)
     # return movie_details
-    return render_template("movie.html")
+    return render_template("movie1.html")
 
 @app.route('/create_list', methods=['POST'])
 def create_list_route():
