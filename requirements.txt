@@ -1,7 +1,0 @@
-flask
-flask_session
-flask_caching
-cs50
-werkzeug
-luhnchecker
-random
