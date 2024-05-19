@@ -55,34 +55,24 @@ ball.addEventListener("click", () => {
 });
 
 
-$(document).ready(function() {
-  $("#newListBtn").click(function() {
-      $("#newListForm").show();
-  });
-
-  $("#closeBtn").click(function() {
-      $("#newListForm").hide();
-  });
-
-  $("#createForm").submit(function(event) {
-      event.preventDefault();
-      var listName = $("#listName").val();
-      $.ajax({
-          type: "POST",
-          url: "/create_list",
-          data: JSON.stringify({ name: listName }),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function(response) {
-              // Handle success response
-              console.log("List created successfully");
-              // Optionally, you can redirect the user to another page or update the UI
-          },
-          error: function(xhr, status, error) {
-              // Handle error
-              console.error("Error creating list:", error);
-          }
-      });
-  });
-
+document.querySelector('#show-new-list-popup').addEventListener('click', function() {
+  const popup = document.querySelector('.popup-form');
+  popup.classList.add('active');
 });
+
+// Possibly for closing the popup (assuming a close button exists)
+document.querySelector('.popup-form .close-btn').addEventListener('click', function() {
+  const popup = document.querySelector('.popup-form');
+  popup.classList.remove('active');
+});
+
+function hideDiv() {
+  document.querySelector('.alert').style.display = 'none';
+};
+
+
+const like = document.querySelector(".fa-heart");
+like.addEventListener("click", () => {
+    like.classList.toggle("active");
+});
+
