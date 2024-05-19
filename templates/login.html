@@ -1,0 +1,36 @@
+{% extends "authentication.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+
+<div class="container">
+    <div class="filmlist-logo">
+        <i class="fa-solid fa-film"></i>
+    </div>
+    <h1 class="filmlist-head">
+        Sign in to Flimlist
+    </h1>
+    <form action="/login" method="post">
+        <div class="login-wrapper">
+            <div class="input-box">
+                <div class="input-label">Username</div>
+                <input autocomplete="off" autofocus id="username" name="username" placeholder="Username" type="text" required>
+            </div>
+
+            <div class="input-box">
+                <div class="input-label">
+                    <span>Password</span>
+                </div>
+                <input id="password" name="password" placeholder="Password" type="password" required>
+            </div>
+
+            <button class="submit-btn">
+                Submit
+            </button>
+        </div>
+    </form>
+
+    <div class="info">
+        <span>New to Filmlist? <a href="/register">Create an account.</a></span>
+    </div>
+</div>
+{% endblock %}

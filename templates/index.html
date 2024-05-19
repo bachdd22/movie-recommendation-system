@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="content-container">
+            <div class="featured-content"
+                style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url({{top[1].backdrop_path}}); background-size: 120%;">
+                <img class="featured-title" src={{top[1].logo_path}} alt="">
+                <p class="featured-desc">{{top[1].title}}</p>
+                <p class="featured-desc">{{top[1].overview}}</p>
+                {% set movie_link = "/movie/?movie_id=" + top[1].id|string %}
+                <button class="featured-button"><a class="movie-page-view-link" href={{movie_link}}>View</a></button>
+            </div>
+
+            <div class="movie-list-container">
+                <h1>Hi {{ session['username'] }}, </h1>
+                <br>
+                <h1 class="movie-list-title">Popular</h1>
+                <br>
+                <div class="movie-list-wrapper mySwiper">
+                    <div class="movie-list swiper-wrapper">
+                        {% for movie in popular[2:] %}
+                        {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                        <a class="movie-page-view-link swiper-slide" href={{movie_link}}>
+                            <div class="movie-list-item">
+                                <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                                <span class="movie-list-item-title">{{ movie.title[:50] }}</span>
+                                <p class="movie-list-item-desc">{{ movie.overview[0:120] + "..." }}</p>                       
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>        
+
+                <h1 class="movie-list-title">Now playing</h1>
+                <br>
+                <div class="movie-list-wrapper mySwiper">
+                    <div class="movie-list swiper-wrapper">
+                        {% for movie in playing %}
+                        {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                        <a class="movie-page-view-link swiper-slide" href={{movie_link}}>
+                            <div class="movie-list-item">
+                                <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                                <span class="movie-list-item-title">{{ movie.title[:50] }}</span>
+                                <p class="movie-list-item-desc">{{ movie.overview[0:120] + "..." }}</p>                       
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+
+                <br>
+                <div class="featured-content"
+                    style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url({{top[7].backdrop_path}}); background-size: 120%;">
+                    <img class="featured-title" src={{top[7].logo_path}} alt="">
+                    <p class="featured-desc">{{top[7].title}}</p>
+                    <p class="featured-desc">{{top[7].overview}}</p>
+                    {% set movie_link = "/movie/?movie_id=" + top[7].id|string %}
+                    <button class="featured-button"><a class="movie-page-view-link" href={{movie_link}}>View</a></button>
+                </div>
+                <br>
+
+                <h1 class="movie-list-title">Top rated</h1>
+                <br>
+                <div class="movie-list-wrapper mySwiper">
+                    <div class="movie-list swiper-wrapper">
+                        {% for movie in top %}
+                        {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                        <a class="movie-page-view-link swiper-slide" href={{movie_link}}>
+                            <div class="movie-list-item">
+                                <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                                <span class="movie-list-item-title">{{ movie.title[:50] }}</span>
+                                <p class="movie-list-item-desc">{{ movie.overview[0:120] + "..." }}</p>                       
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+
+                <h1 class="movie-list-title">Upcoming</h1>
+                <br>
+                <div class="movie-list-wrapper mySwiper">
+                    <div class="movie-list swiper-wrapper">
+                        {% for movie in upcoming %}
+                        {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                        <a class="movie-page-view-link swiper-slide" href={{movie_link}}>
+                            <div class="movie-list-item">
+                                <img class="movie-list-item-img" src={{ movie.poster_path }} alt="">
+                                <span class="movie-list-item-title">{{ movie.title[:50] }}</span>
+                                <p class="movie-list-item-desc">{{ movie.overview[0:120] + "..." }}</p>                       
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+
+        </div>
+    </div>
+    <br><br>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 4.5,
+            spaceBetween: 30,
+            slidesPerGroup: 3,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            });
+    </script>
+{% endblock %}

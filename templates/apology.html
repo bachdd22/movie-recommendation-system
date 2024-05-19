@@ -1,0 +1,29 @@
+{% extends "authentication.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block body %}
+    <style>
+        .large-button {
+            position: relative;
+            left: 31%;
+            width: 200px; /* Adjust as needed */
+            height: 50px; /* Adjust as needed */
+            font-size: 16px; /* Adjust font size if needed */
+        }
+    </style>
+    <div style="justify-content: center">
+        <img alt="{{ top }}" class="border img-fluid" src="https://api.memegen.link/images/cake/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?width=555" title="{{ top }}">
+        <div>
+            <button class="large-button" onclick="goBack()">Go Back</button>
+        </div>
+    </div>
+    <script>
+        function goBack() {
+            // Go back to the previous page
+            window.history.back();
+        }
+    </script>
+{% endblock %}

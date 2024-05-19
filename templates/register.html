@@ -1,0 +1,44 @@
+{% extends "authentication.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="filmlist-logo">
+            <i class="fa-solid fa-film"></i>
+        </div>
+        <h1 class="filmlist-head">
+            REGISTER
+        </h1>
+        <form action="/register" method="post">
+            <div class="login-wrapper">
+                <div class="input-box">
+                    <div class="input-label">Username</div>
+                    <input autocomplete="off" id="username" name="username" placeholder="Username" type="text">
+                </div>
+
+                <div class="input-box">
+                    <div class="input-label">
+                        <span>Password</span>
+                    </div>
+                    <input id="password" name="password" placeholder="Password" type="password">
+                </div>
+
+                <div class="input-box">
+                    <div class="input-label">
+                        <span>
+                            Comfirm Password
+                        </span>
+                    </div>
+                    <input id="password" name="confirmation" placeholder="Confirm Password" type="password">
+                </div>
+
+                <button class="submit-btn">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

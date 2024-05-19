@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}{{movie.title}}{% endblock %}
+
+{% block body %}
+
+<div class="img-container">
+    <div class="content-container">
+        <div class="featured-content-movie" style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url({{movie.backdrop_path}}); background-size: 120%">
+        </div>
+    </div>
+</div>
+
+<div class="movie-container">
+    <div class="grid">
+        <div class="grid__row">
+            <div class="grid__column-2 col2">
+                <div class="category">
+                    <img src={{movie.poster_path}} alt="" class="category-movie-img">
+                </div>
+                <div class="download-img-button">
+                    <a href="" download class="download-btn">
+                        Download
+                        <i class="fa fa-download"></i>
+                    </a>
+                </div>
+
+                <ul class="category-film">
+                    <li class="movie-icon-show">
+                        {% if watch.status %}
+                            <i class="fa-solid fa-eye category-film-icon in-watch" onClick="toggleActive({{this, watch.list_id}}, {{movie.id}})"></i>
+                        {% else %}
+                            <i class="fa-solid fa-eye category-film-icon not-in-watch" onClick="toggleActive(this, {{watch.list_id}}, {{movie.id}})"></i>
+                        {% endif %}
+                    </li>
+                    
+                    <li class="movie-icon-show">
+                        {% if fav.status %}
+                            <i class="fa-solid fa-heart category-film-icon in-like" onClick="toggleActive(this, {{fav.list_id}}, {{movie.id}})"></i>
+                        {% else %}
+                            <i class="fa-solid fa-heart category-film-icon not-in-like" onClick="toggleActive(this, {{fav.list_id}}, {{movie.id}})"></i>
+                        {% endif %}
+                    </li>
+
+                    <li class="movie-icon-show">
+                        <div class="dropdown">
+                            <button class="dropbtn"><i class="fa-solid fa-plus category-film-icon"></i></button>
+                            <div class="dropdown-content">
+                            {% for list in lists %}
+                                {% if list.status %}
+                                <a class="dropdown-content-link-in" onClick="toggleActive(this, {{list.list_id}}, {{movie.id}})">{{list.list_name}}</a>
+                                {% else %}
+                                <a class="dropdown-content-link" onClick="toggleActive(this, {{list.list_id}}, {{movie.id}})">{{list.list_name}}</a>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+
+                <div class="watch-panel-container">
+                    <div class="watch-panel">
+                        <div class="header1">
+                            <h3 class="title">Production companies</h3>
+                        </div>
+                        {% for company in movie.production_companies %}
+                        <div class="header2">
+                            <a href="" class="watch-panel-see-more">
+                                {% if company.logo_path %}
+                                {% set com_link = "https://image.tmdb.org/t/p/original" + company.logo_path%}
+                                <img src={{com_link}} class="img-icon-link">
+                                {%endif%}
+                            </a>
+                            <a href="" class="watch-panel-link">
+                                <h3 style="color: black !important">{{company.name}}</h3>
+                            </a>
+                        </div>
+                        {%endfor%}
+                        
+                    </div>
+                </div>
+
+                {% if role == "premium" %}
+                {% for clip in clips %}
+                {% if clip.site == "YouTube" %}
+                <iframe width="450" height="315" style="padding-top: 10px; padding-bottom: 20px" src="https://www.youtube.com/embed/{{clip.key}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                {%endif%}{%endfor%}{% endif %}
+            </div>
+
+            <div class="grid__column-10">        
+                <h1 class="movie-name">
+                    {{movie.title}}
+                </h1>
+                <div class="movie-desc">
+                    <p class="movie-title">
+                        {{movie.tagline}}
+                    </p>
+                    <p class="desc">
+                        {{movie.overview}}
+                    </p>
+
+                </div>
+
+                <div class="gallery-container">
+                    <div class="image-container">
+                        {% for image in images %}
+                            <img src={{image}}>
+                        {%endfor%}
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleActive(element, list_id, movie_id) {
+            element.classList.toggle("active");
+            fetch("/change_movie_list_status", {
+                method: "POST",
+                body: JSON.stringify({ "list_id": list_id, "movie_id": movie_id }),
+              });
+        }
+
+        function toggleActiv(list_id, movie_id) {
+            fetch("/change_movie_list_status", {
+                method: "POST",
+                body: JSON.stringify({ "list_id": list_id, "movie_id": movie_id }),
+              });
+        }
+    </script>
+</div>
+{% endblock %}

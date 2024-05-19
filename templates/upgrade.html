@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Upgrade{% endblock %}
+{% block body %}
+
+<div class="person-profile-container">
+    <div class="person-profile-content">
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="image-content">
+                    <span class="overplay"></span>
+                    <div class="card-image">
+                        <i class="fa-solid fa-star icon-profile"></i>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h2 class="name-package">UPGRADE</h2>
+                    <ul class="description">
+                        <li class="benifit">View exclusive posters and backdrops</li>
+                        <li class="benifit">Watch movie clips</li>
+                        <li class="benifit">Download your favorite posters</li>
+                        <li class="benifit">ONLY FOR 2,000 VND</li>
+                    </ul>
+                    {% set role = user.role %}
+                    {% if role == 'free' %}
+                    <a href="/upgrade_portal">
+                        <button class="profile-button">Go to credit card portal</button>
+                    </a>
+                    {% else %}
+                    <h3 class="profile-button">You are a premium user.</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

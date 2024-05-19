@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}{{name}}{%endblock%}
+
+{% block body %}
+    <div class="container">
+        <h2 style="position: relative; left: 50px; padding-top: 15px">{{name}} movies</h2>
+        <div class="content-container" style="display: flex; justify-content: center">
+    
+
+            <ul class="poster-list" style="width: 1200px; padding-top: 20px">
+                {% if results %}
+                    {% for result in results %}
+                    <li>
+                        {% set movie_link = "/movie/?movie_id=" + result.id|string %}
+                        <a class="search-item-link" href={{movie_link}}>
+                            <div class="search-list-item">
+                                <img class="search-list-item-img" src={{ result.poster_path }} alt="">
+                                <span class="popup-search-title">{{ result.title }}</span>
+                            </div>
+                        </a>
+                    </li>              
+                    {% endfor %}
+                {% endif %}
+            </ul>
+
+    </div>
+
+    
+    <div class="pagination">
+        {% if page_number > 1 %}
+        {% set prev_page_int = page_number - 1 %}
+        {% set prev_page = prev_page_int | string %}
+            <a href="/{{name_lower}}/?page={{prev_page}}">&laquo;</a>
+        {% else %}
+        <a href="#">&laquo;</a>
+        {% endif %}
+
+        {% for page in pages %}
+        {% set page_index = page | string %}
+          <a href="/{{name_lower}}/?page={{page_index}}" class="page-link {% if page == page_number %}active{% endif %}">{{ page }}</a>
+        {% endfor %}
+
+        {% if page_number < 10 %}
+        {% set next_page_int = page_number + 1 %}
+        {% set next_page = next_page_int | string %}
+            <a href="/{{name_lower}}/?page={{next_page}}">&raquo;</a>
+        {% else %}
+        <a href="#">&raquo;</a>
+        {% endif %}
+      </div>
+
+    
+{% endblock %}

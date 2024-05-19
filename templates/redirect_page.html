@@ -1,0 +1,17 @@
+{% extends "authentication.html" %}
+
+{% block title %}
+    Redirect
+{% endblock %}
+
+{% block body %}
+    {% if alert_message %}
+        <script>
+            alert("{{ alert_message }}");
+            // Automatically redirect to the home page after 2 seconds
+            setTimeout(function() {
+                window.location.href = "/";
+            }, 100); // 2000 milliseconds = 2 seconds
+        </script>
+    {% endif %}
+{% endblock %}

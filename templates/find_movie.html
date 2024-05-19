@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <div class="card-search">
+        <i class="fa-solid fa-film icon-search"></i>
+        <h1 class="logo-search">Search</h1>
+        
+    </div>
+    <div class="container" style="padding: 30px;" class="search-box">
+        <form action="/find_movie" method="post" class="search">
+            <input autocomplete="off" autofocus name="movieName" placeholder="Name of your movie" type="text" required>
+            <button type="submit">Find your movie</button>
+        </form>
+        <br>
+        {% if movie_name %}
+        <h2 style="padding-left: 30px;">Search results for "{{movie_name}}": </h2>
+        <br>
+        {% endif %}
+        <ul class="poster-list">
+        {% if results %}
+            {% for result in results %}
+            <li>
+                {% set movie_link = "/movie/?movie_id=" + result.id|string %}
+                <a class="search-item-link" href={{movie_link}}>
+                    <div class="search-list-item">
+                        <img class="search-list-item-img" src={{ result.link }} alt="">
+                        <span class="popup-search-title">{{ result.title }}</span>
+                    </div>
+                </a>
+            </li>              
+            {% endfor %}
+        {% endif %}
+        </ul>
+    </div>
+
+{% endblock %}

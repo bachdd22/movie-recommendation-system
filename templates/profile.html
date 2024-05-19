@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+
+    <div class="person-profile-container">
+        <div class="person-profile-content">
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="image-content">
+                        <span class="overplay"></span>
+                        <div class="card-image">
+                            <i class="fa-solid fa-film icon-profile"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="description">
+                            <li class="user-name">Username: {{ user.username }}</li>
+                            <li class="user-status">User status: {{ user.role }}</li>
+                            <li class="member">Member since: {{ user.registration_datetime[0:10] }}</li>
+                        </ul>
+
+                        <a href="/change_password">
+                            <button class="profile-button">Change your password</button>
+                        </a>
+                        <a href="/upgrade">
+                            <button class="profile-button">Upgrade</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

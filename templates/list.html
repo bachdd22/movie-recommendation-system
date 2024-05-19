@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %}Lists{%endblock%}
+{% block body %}
+
+<div class="container">
+    <h1 style="padding-left: 3px;">Movie Lists</h1>
+    <div class="new-list-create">
+        <button id="show-new-list-popup">New List</button>
+    </div>
+
+    <form class="popup-form" method="POST" action="/movie_list">
+        <div class="close-btn">&times;</div>
+        <div class="create-list-form">
+            <h2>Create list</h2>
+            <div class="form-element">
+                <input type="text" name="listName" maxlength="22" id="listName" placeholder="Enter list name" required>
+            </div>
+            <div class="form-element">
+                <button>Create</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="movie-list-container">
+        {% for list in lists %}
+        {% if list.movies|length > 0 %}
+        <h1 class="movie-list-title">{{list.name}}</h1>
+                <br>
+                <div class="movie-list-wrapper">
+                    <div class="movie-list">
+                        {% for movie in list.movies %}
+                        {% set movie_link = "/movie/?movie_id=" + movie.id|string %}
+                        <a class="movie-page-view-link" href={{movie_link}}>
+                            <div class="movie-list-item">
+                                <img class="movie-list-item-img" src={{ movie.poster }} alt="">
+                                <span class="movie-list-item-title">{{ movie.name[:50] }}</span>                    
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+        {%endif%}
+        {%endfor%}
+    </div>
+
+
+
+
+
+
+
+</div>
+    
+{% endblock %}
