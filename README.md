@@ -46,6 +46,8 @@ flask run
 
 * Đinh Duy Bách - 22022531
 * Lê Hữu Đức - 22022535
+* Báo cáo và video demo: https://wide-glazer-4f5.notion.site/B-o-c-o-b-i-t-p-l-n-CNPM-e6920c056c224b768efb5d51c74459e2?pvs=4
+  
 
 
 ## License
