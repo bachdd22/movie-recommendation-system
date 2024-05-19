@@ -82,12 +82,36 @@ def getMovieDetails(movie_id):
     url = "https://api.themoviedb.org/3/movie/" + movie_id + "?language=en-US"
     base_url = "https://image.tmdb.org/t/p/original"
     response = requests.get(url, headers=headers).json()
-    imdb_id = response["imdb_id"]
-    url = "https://api.themoviedb.org/3/find/"+ imdb_id +"?external_source=imdb_id"
-    response_1 = requests.get(url, headers=headers).json()
-    response["backdrop_path"] = base_url + response["backdrop_path"]
-    response["poster_path"] = base_url + response["poster_path"]
-    response["overview"] = response_1["movie_results"][0]["overview"]
-    response["release_date"] = response_1["movie_results"][0]["release_date"]
+    if response["imdb_id"]:
+        imdb_id = response["imdb_id"]
+        url = "https://api.themoviedb.org/3/find/"+ imdb_id +"?external_source=imdb_id"
+        response_1 = requests.get(url, headers=headers).json()
+        response["overview"] = response_1["movie_results"][0]["overview"]
+        response["release_date"] = response_1["movie_results"][0]["release_date"]
+        
+    if response["backdrop_path"]:
+        response["backdrop_path"] = base_url + response["backdrop_path"]
+    if response["poster_path"]:
+        response["poster_path"] = base_url + response["poster_path"]
+    
     return response
 
+@cache.memoize(timeout=60)
+def getMoviePicture(movie_id):
+    url = "https://api.themoviedb.org/3/movie/" + str(movie_id) + "/images?include_image_language=en"
+    base_url = "https://image.tmdb.org/t/p/original"
+    types = ["backdrops", "posters", "logos"]
+    response = requests.get(url, headers=headers).json()
+    images = dict()
+    for type in types:
+        images[type] = [i["file_path"] for i in response[type]]
+        for index in range(len(images[type])):
+            images[type][index] = base_url + images[type][index]
+    return images["backdrops"] + images["posters"]
+
+@cache.memoize(timeout=60)
+def getMovieClips(movie_id):
+    url = "https://api.themoviedb.org/3/movie/" + str(movie_id) + "/videos?language=en-US"
+    response = requests.get(url, headers=headers).json()
+    videos = response["results"]
+    return videos
