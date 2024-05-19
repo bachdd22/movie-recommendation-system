@@ -1,8 +1,8 @@
-from flask import Flask, redirect, render_template, request, session, jsonify
-# from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, redirect, render_template, request, flash, session, jsonify
 from flask_session import Session
 from flask_caching import Cache 
 from cs50 import SQL
+import json
 # from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from luhnchecker.luhn import Luhn
@@ -12,6 +12,7 @@ import findMovies
 # Configure app
 app = Flask(__name__)
 db = SQL("sqlite:///users.db")
+db.execute("PRAGMA foreign_keys = ON;")
 movie_db = SQL("sqlite:///movies.db")
 cache.init_app(app, config={'CACHE_TYPE': 'simple'})
 # app.app_context().push()
@@ -67,7 +68,7 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
         session["username"] = rows[0]["username"]
-
+        session["role"] = rows[0]["role"]
         # Redirect user to home page
         return redirect("/")
 
@@ -101,6 +102,9 @@ def register():
 
         try:
             new_user = db.execute("INSERT INTO users (username, password) VALUES (?, ?)", username, hash)
+            user_id = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["id"]
+            db.execute("INSERT INTO lists (user_id, list_title) VALUES (?, ?)", user_id, "Favourites")
+            db.execute("INSERT INTO lists (user_id, list_title) VALUES (?, ?)", user_id, "Watchlist")
         except:
             return apology("Username already exists")
         # session["user_id"] = new_user
@@ -171,7 +175,9 @@ def profile():
 @app.route("/upgrade")
 @login_required
 def upgrade():
-    return render_template("upgrade.html")
+    user_id = session.get("user_id")
+    user = db.execute("SELECT * FROM users WHERE id = ?", user_id)[0]
+    return render_template("upgrade.html", user=user)
 
 @app.route("/upgrade_portal", methods=["GET", "POST"])
 @login_required
@@ -186,29 +192,115 @@ def upgrade_portal():
             return render_template("redirect_page.html", alert_message="Invalid card. You will be redirected to home page.")
     return render_template("credit.html")
 
-@app.route("/movie_list")
+@app.route("/movie_list", methods=["GET", "POST"])
 @login_required
 def movie_list():
-    return render_template("list.html")
+    user_id = session.get("user_id")
+    if request.method == "POST":
+        list_name = request.form.get("listName")
+        check = db.execute("SELECT * FROM lists WHERE user_id = ? AND list_title = ?", user_id, list_name)
+        if len(check) == 0:
+            db.execute("INSERT INTO lists (user_id, list_title) VALUES (?, ?)", user_id, list_name)
+            flash("List created !", category="success")
+        else:
+            flash("List name already exists !", category="error")
+    user_list = []
+    lists = db.execute("SELECT id, list_title FROM lists WHERE user_id = ?", user_id)
+    for list in lists:
+        film_list = dict()
+        list_id = list["id"]
+        list_title = list["list_title"]
+        film_list["id"] = list_id
+        film_list["name"] = list_title
+        movies = []
+        for id in getMovieinList(list_id):
+            movie = {"id": id,
+                     "name": db.execute("SELECT * FROM movies WHERE id = ?", id)[0]["movie_name"],
+                     "poster": db.execute("SELECT * FROM movies WHERE id = ?", id)[0]["poster"]}
+            movies.append(movie)
+        
+        film_list["movies"] = movies
+        
+        user_list.append(film_list)
+
+    return render_template("list.html", lists=user_list)
     
 @app.route("/movie/")
 @login_required
 def movie():
-    movie_id = str(request.args.get("movie_id"))
-    movie_details = findMovies.getMovieDetails(movie_id)
-    # return movie_details
-    return render_template("movie1.html")
-
-@app.route('/create_list', methods=['POST'])
-def create_list_route():
     user_id = session.get("user_id")
-    data = request.json
-    list_name = data.get('name')
-    if not list_name:
-        return jsonify({'error': 'List name is required'}), 400
-    
-    try:
-        db.execute("INSERT INTO lists (user_id, list_title) VALUES (?, ?)", user_id, list_name)
-        return jsonify({'success': True}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    movie_id = str(request.args.get("movie_id"))
+    images = findMovies.getMoviePicture(movie_id)
+    movie_details = findMovies.getMovieDetails(movie_id)
+    list_info = db.execute("SELECT * FROM lists WHERE user_id = ?", user_id)
+    list_names = [l["list_title"] for l in list_info]
+    list_ids = [l["id"] for l in list_info]
+    inList = []
+    fav = []
+    watch = []
+    for list in list_ids:
+        status = {"list_id": list, "list_name": list_names[list_ids.index(list)], "status": int(movie_id) in getMovieinList(list)}
+        if status["list_name"] == "Favourites":
+            fav.append(status)
+        elif status["list_name"] == "Watchlist":
+            watch.append(status)
+        else:
+            inList.append(status)
+    role = db.execute("SELECT * FROM users WHERE id = ?", user_id)[0]["role"]
+    clips = findMovies.getMovieClips(movie_id)
+    return render_template("movie.html", movie=movie_details, lists=inList, fav=fav[0], watch=watch[0], images=images, role=role, clips=clips)
+
+@app.route("/pictures/")
+@login_required
+def pictures():
+    movie_id = request.args.get("movie_id")
+    images = findMovies.getMoviePicture(movie_id)
+    return render_template("gallery.html", images=images)
+
+@app.route("/popular/")
+@login_required
+def popular():
+    page = int(request.args.get("page"))
+    popular = findMovies.findPopular(page)
+    return render_template("category.html", results=popular, page_number=page, pages=list(range(1, 11)), name="Popular", name_lower="popular")
+
+@app.route("/now_playing/")
+@login_required
+def now_playing():
+    page = int(request.args.get("page"))
+    now_playing = findMovies.findNowPlaying(page)
+    return render_template("category.html", results=now_playing, page_number=page, pages=list(range(1, 11)), name="Now playing", name_lower="now_playing")
+
+@app.route("/top_rated/")
+@login_required
+def top_rated():
+    page = int(request.args.get("page"))
+    top_rated = findMovies.findTopRated(page)
+    return render_template("category.html", results=top_rated, page_number=page, pages=list(range(1, 11)), name="Top rated", name_lower="top_rated")
+
+@app.route("/upcoming/")
+@login_required
+def upcoming():
+    page = int(request.args.get("page"))
+    upcoming = findMovies.findUpcoming(page)
+    return render_template("category.html", results=upcoming, page_number=page, pages=list(range(1, 11)), name="Upcoming", name_lower="upcoming")
+
+@app.route("/change_movie_list_status", methods=["POST"])
+def change():
+    note = json.loads(request.data)
+    list_id = note["list_id"]
+    movie_id = note["movie_id"]
+    detail = findMovies.getMovieDetails(str(movie_id))
+    check = db.execute("SELECT * FROM contains WHERE list_id=? and movie_id = ?", list_id, movie_id)
+    if len(check) == 1:
+        db.execute("DELETE FROM contains WHERE list_id = ? and movie_id = ?", list_id, movie_id)
+    else:
+        if len(db.execute("SELECT * FROM movies WHERE id = ?", movie_id)) == 0:
+            db.execute("INSERT INTO movies (id, movie_name, poster) VALUES (?, ?, ?)", movie_id, detail["title"], detail["poster_path"])
+        db.execute("INSERT INTO contains (list_id, movie_id) VALUES (?, ?)", list_id, movie_id)
+    return jsonify({})
+
+def getMovieinList(list_id):
+    movies = [i["movie_id"] for i in db.execute("SELECT * FROM contains WHERE list_id = ?", list_id)]
+    return movies
+
