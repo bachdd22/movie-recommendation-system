@@ -28,12 +28,12 @@ Website được xây dựng bằng Flask, CSS, HTML và JavaScript. Trang web g
 pip install -r requirements.txt
 ```
 ### Cấu trúc
-*/static: các file javascript và css của trang web
-*/templates: các templates HTML
-*app.py: phần code chính xử lý trang web
-*findMovies.py: xử lý tìm kiếm thông tin phim
-*key.py: key API
-*Các file .db là cơ sở dữ liệu của trang web
+* /static: các file javascript và css của trang web
+* /templates: các templates HTML
+* app.py: phần code chính xử lý trang web
+* findMovies.py: xử lý tìm kiếm thông tin phim
+* key.py: key API
+* Các file .db là cơ sở dữ liệu của trang web
 
 ### Cài đặt
 
