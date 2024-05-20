@@ -46,6 +46,10 @@ pip install -r requirements.txt
 ```
 flask run
 ```
+hoặc
+```
+python -m flask run
+```
 
 
 ## Bài tập lớn CNPM 5/2024
